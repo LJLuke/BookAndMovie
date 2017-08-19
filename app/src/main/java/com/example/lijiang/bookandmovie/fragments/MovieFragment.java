@@ -1,16 +1,14 @@
-package com.example.lijiang.bookandmovie.Fragment;
+package com.example.lijiang.bookandmovie.fragments;
 
 
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.print.PageRange;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.lijiang.bookandmovie.HttpUtil;
-import com.example.lijiang.bookandmovie.MainActivity;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.RecyclerviewAdapter;
 import com.example.lijiang.bookandmovie.VideoHelper;

@@ -1,56 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.lijiang.bookandmovie.MainActivity">
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
-            android:background="#ffff"
             android:layout_width="match_parent"
-            android:layout_height="60dp">
+            android:layout_height="60dp"
+            android:background="#ffff"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
             <Spinner
                 android:id="@+id/spinner"
-                android:layout_width="80dp"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
-                android:theme="@style/SpinnerStyle">
-            </Spinner>
+                android:theme="@style/SpinnerStyle"></Spinner>
+
             <EditText
-                android:hint=" 电影/图书"
-                android:layout_width="260dp"
+                android:layout_width="240dp"
                 android:layout_height="match_parent"
-                android:layout_marginRight="10dp"/>
+                android:layout_marginRight="10dp"
+                android:hint=" 电影/图书" />
+
             <ImageView
-                android:src="@drawable/search"
                 android:layout_width="20dp"
-                android:layout_height="20dp"/>
+                android:layout_height="20dp"
+                android:src="@drawable/search" />
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
+        android:id="@+id/linear_change"
         android:layout_width="match_parent"
         android:layout_height="30dp">
+
         <TextView
+            android:id="@+id/text_movie"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="电影"
-            android:textSize="17sp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"/>
+            android:textSize="17sp" />
+
         <TextView
+            android:id="@+id/text_book"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="图书"
-            android:textSize="17sp"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"/>
+            android:textSize="17sp" />
     </LinearLayout>
 
     <FrameLayout

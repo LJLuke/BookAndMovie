@@ -3,4 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="colorLuck_1">#FF4081</color>
+    <color name="colorLuck_2">#38ccd6</color>
+    <color name="colorLuck_3">#60c473</color>
+    <color name="colorLuck_4">#cfb144</color>
+    <color name="colorLuck_5">#de67e2</color>
 </resources>
