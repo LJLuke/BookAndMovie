@@ -44,7 +44,7 @@ import okhttp3.Response;
 public class BookFragment extends Fragment {
     private static final String TAG = "BookFragment";
     private View view;
-    private int count = 0;
+    private int count =0;
     private List<Integer> pagers = new ArrayList<>();
     private List<BookHelper> bookImgs = new ArrayList<>();
     public static List<BookHelper> sportSources = new ArrayList<>();
