@@ -67,29 +67,5 @@
         android:layout_height="match_parent">
 
     </FrameLayout>
-    <!--<LinearLayout-->
-        <!--android:id="@+id/linear_change"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="30dp">-->
-
-
-        <!--<TextView-->
-            <!--android:id="@+id/text_movie"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center"-->
-            <!--android:text="电影"-->
-            <!--android:textSize="17sp" />-->
-
-        <!--<TextView-->
-            <!--android:id="@+id/text_book"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="1"-->
-            <!--android:gravity="center"-->
-            <!--android:text="图书"-->
-            <!--android:textSize="17sp" />-->
-    <!--</LinearLayout>-->
 
 </LinearLayout>
