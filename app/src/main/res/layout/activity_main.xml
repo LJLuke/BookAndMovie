@@ -6,62 +6,90 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="56dp">
 
         <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="match_parent"
             android:background="#ffff"
             android:focusable="true"
             android:focusableInTouchMode="true">
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="wrap_content"
-                android:layout_height="60dp"
-                android:theme="@style/SpinnerStyle"></Spinner>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <Spinner
+                    android:layout_gravity="center"
+                    android:id="@+id/spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_weight="2"
+                    android:theme="@style/SpinnerStyle">
 
-            <EditText
-                android:layout_width="240dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="10dp"
-                android:hint=" 电影/图书" />
+                </Spinner>
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/search" />
+                <EditText
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="4"
+                    android:hint=" 电影/图书"
+                    android:textSize="15sp"/>
+
+                <ImageView
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/search" />
+            </LinearLayout>
+
         </android.support.v7.widget.Toolbar>
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/linear_change"
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tablayout"
         android:layout_width="match_parent"
-        android:layout_height="30dp">
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/text_movie"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="电影"
-            android:textSize="17sp" />
+    </android.support.design.widget.TabLayout>
 
-        <TextView
-            android:id="@+id/text_book"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="图书"
-            android:textSize="17sp" />
-    </LinearLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/tab_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
 
+    </android.support.v4.view.ViewPager>
     <FrameLayout
         android:id="@+id/framlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     </FrameLayout>
+    <!--<LinearLayout-->
+        <!--android:id="@+id/linear_change"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30dp">-->
+
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_movie"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="电影"-->
+            <!--android:textSize="17sp" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/text_book"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:gravity="center"-->
+            <!--android:text="图书"-->
+            <!--android:textSize="17sp" />-->
+    <!--</LinearLayout>-->
+
 </LinearLayout>

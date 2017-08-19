@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.lijiang.bookandmovie.MainActivity;
+import com.example.lijiang.bookandmovie.Activity.MainActivity;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.adapters.MoreBooksAdapter;
 import com.example.lijiang.bookandmovie.entities.BookHelper;

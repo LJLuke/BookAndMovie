@@ -1,17 +1,16 @@
-package com.example.lijiang.bookandmovie;
+package com.example.lijiang.bookandmovie.adapters;
 
 
 import android.content.Context;
-import android.support.annotation.LayoutRes;
-import android.support.annotation.Nullable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.example.lijiang.bookandmovie.R;
+import com.example.lijiang.bookandmovie.entities.VideoHelper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

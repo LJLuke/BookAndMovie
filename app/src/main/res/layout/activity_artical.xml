@@ -47,7 +47,7 @@
                     android:layout_marginTop="3dp"
                     android:id="@+id/author"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp"
+                    android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="作者:"
                     android:textSize="11sp" />
@@ -103,12 +103,12 @@
                     <TextView
                         android:id="@+id/score"
                         android:layout_width="80dp"
-                        android:layout_height="15dp"
+                        android:layout_height="20dp"
                         android:layout_gravity="center"
                         android:layout_marginTop="3dp"
                         android:gravity="center"
                         android:textColor="#141a1a"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"/>
 
                     <RatingBar
                         android:id="@+id/stars"

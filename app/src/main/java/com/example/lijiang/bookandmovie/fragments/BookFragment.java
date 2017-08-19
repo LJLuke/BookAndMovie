@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -18,7 +17,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.lijiang.bookandmovie.MainActivity;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.Utils.HttpUtil;
 import com.example.lijiang.bookandmovie.Utils.RobinSnapHelper;

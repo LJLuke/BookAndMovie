@@ -2,6 +2,7 @@ package com.example.lijiang.bookandmovie.fragments;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -16,10 +17,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lijiang.bookandmovie.HttpUtil;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.example.lijiang.bookandmovie.Activity.ArticalActivity;
 import com.example.lijiang.bookandmovie.R;
-import com.example.lijiang.bookandmovie.RecyclerviewAdapter;
-import com.example.lijiang.bookandmovie.VideoHelper;
+import com.example.lijiang.bookandmovie.adapters.RecyclerviewAdapter;
+import com.example.lijiang.bookandmovie.Utils.HttpUtil;
+import com.example.lijiang.bookandmovie.Utils.RobinSnapHelper;
+import com.example.lijiang.bookandmovie.entities.VideoHelper;
 import com.zhouwei.mzbanner.MZBannerView;
 import com.zhouwei.mzbanner.holder.MZHolderCreator;
 import com.zhouwei.mzbanner.holder.MZViewHolder;
@@ -72,16 +76,22 @@ public class MovieFragment extends Fragment {
 
         upComingMovieView = mView.findViewById(R.id.upcoming_movies);
         upComingRecyclerview = (RecyclerView) upComingMovieView.findViewById(R.id.recyclerview);
+        RobinSnapHelper robinSnapHelper = new RobinSnapHelper();
+        robinSnapHelper.attachToRecyclerView(upComingRecyclerview);
         upComingGroup = (TextView) upComingMovieView.findViewById(R.id.group_name);
         upComingGroup.setText("即将上映");
 
         top250View = mView.findViewById(R.id.top_250);
         top250Recyclerview = (RecyclerView) top250View.findViewById(R.id.recyclerview);
+        RobinSnapHelper robinSnapHelper1 = new RobinSnapHelper();
+        robinSnapHelper1.attachToRecyclerView(top250Recyclerview);
         top250Group = (TextView) top250View.findViewById(R.id.group_name);
         top250Group.setText("Top250");
 
         boxOfficeView = mView.findViewById(R.id.box_office);
         boxOfficeRecyclerview = (RecyclerView) boxOfficeView.findViewById(R.id.recyclerview);
+        RobinSnapHelper robinSnapHelper2 = new RobinSnapHelper();
+        robinSnapHelper2.attachToRecyclerView(boxOfficeRecyclerview);
         boxOfficeGroup = (TextView) boxOfficeView.findViewById(R.id.group_name);
         boxOfficeGroup.setText("北美票房榜");
 
@@ -138,7 +148,7 @@ public class MovieFragment extends Fragment {
     }
 
     private void loadVideo(String videoUrl) {
-        HttpUtil.sendOkHttpRequst(videoUrl, new okhttp3.Callback() {
+        HttpUtil.sendOkhttpRequest(videoUrl, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -156,6 +166,7 @@ public class MovieFragment extends Fragment {
                         VideoHelper video = new VideoHelper();
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         video.setTitle(jsonObject.getString("title"));
+                        video.setId(jsonObject.getString("id"));
                         JSONObject jsonObject1 = jsonObject.getJSONObject("images");
                         video.setImageUrl(jsonObject1.getString("medium"));
                         hotMovieList.add(video);
@@ -168,7 +179,7 @@ public class MovieFragment extends Fragment {
         });
     }
     private void load(String url, final List<VideoHelper> videoList,final int LOADFINISH){
-        HttpUtil.sendOkHttpRequst(url, new okhttp3.Callback() {
+        HttpUtil.sendOkhttpRequest(url, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -185,6 +196,7 @@ public class MovieFragment extends Fragment {
                         VideoHelper video = new VideoHelper();
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         video.setTitle(jsonObject.getString("title"));
+                        video.setId(jsonObject.getString("id"));
                         JSONObject jsonObject1 = jsonObject.getJSONObject("images");
                         video.setImageUrl(jsonObject1.getString("medium"));
                         videoList.add(video);
@@ -198,7 +210,7 @@ public class MovieFragment extends Fragment {
     }
 
     private void loadBoxOffice(String url, final List<VideoHelper> videoList,final int LOADFINISH){
-        HttpUtil.sendOkHttpRequst(url, new okhttp3.Callback() {
+        HttpUtil.sendOkhttpRequest(url, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
@@ -216,6 +228,7 @@ public class MovieFragment extends Fragment {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         JSONObject jsonObject1 = jsonObject.getJSONObject("subject");
                         video.setTitle(jsonObject1.getString("title"));
+                        video.setId(jsonObject1.getString("id"));
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("images");
                         video.setImageUrl(jsonObject2.getString("medium"));
                         videoList.add(video);
@@ -227,11 +240,19 @@ public class MovieFragment extends Fragment {
             }
         });
     }
-    private void setRecyclerview(List<VideoHelper> videoHelperList,RecyclerView recyclerView){
+    private void setRecyclerview(final List<VideoHelper> videoHelperList, RecyclerView recyclerView){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         RecyclerviewAdapter adapter1 = new RecyclerviewAdapter(R.layout.movie_recyclerview_item,videoHelperList,getContext());
         recyclerView.setAdapter(adapter1);
+        adapter1.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(getActivity(), ArticalActivity.class);
+                intent.putExtra("id",videoHelperList.get(position).getId());
+                startActivity(intent);
+            }
+        });
     }
 }

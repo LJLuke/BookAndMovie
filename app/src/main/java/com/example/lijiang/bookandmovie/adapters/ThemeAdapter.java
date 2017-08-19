@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.lijiang.bookandmovie.ArticalActivity;
+import com.example.lijiang.bookandmovie.Activity.ArticalActivity;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
 

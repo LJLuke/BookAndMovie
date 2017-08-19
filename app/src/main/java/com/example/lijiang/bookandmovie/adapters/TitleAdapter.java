@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.lijiang.bookandmovie.MainActivity;
+import com.example.lijiang.bookandmovie.Activity.MainActivity;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
 import com.example.lijiang.bookandmovie.fragments.BookFragment;
