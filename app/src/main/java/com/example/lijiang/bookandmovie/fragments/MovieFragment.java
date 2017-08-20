@@ -10,10 +10,13 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -30,6 +33,7 @@ import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +57,9 @@ public class MovieFragment extends Fragment {
     private TextView upComingGroup;
     private TextView top250Group;
     private TextView boxOfficeGroup;
+    private LinearLayout linearMovie;
+    private ProgressBar progressBar;
+    private int count=0;
     private MZBannerView mMZBannerView;
     static List<VideoHelper> hotMovieList = new ArrayList<>();
     private List<VideoHelper> upComingList = new ArrayList<>();
@@ -63,6 +70,7 @@ public class MovieFragment extends Fragment {
     private static final int HOTMOVIE_LOADFINISH = 1;
     private static final int TOP250_LOADFINISH = 2;
     private static final int BOXOFFICE_LOADFINISH = 3;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,21 +81,21 @@ public class MovieFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        linearMovie = (LinearLayout) mView.findViewById(R.id.linear_movie);
+        progressBar = (ProgressBar) mView.findViewById(R.id.progress_movie);
+        linearMovie.setVisibility(View.INVISIBLE);
         upComingMovieView = mView.findViewById(R.id.upcoming_movies);
         upComingRecyclerview = (RecyclerView) upComingMovieView.findViewById(R.id.recyclerview);
         RobinSnapHelper robinSnapHelper = new RobinSnapHelper();
         robinSnapHelper.attachToRecyclerView(upComingRecyclerview);
         upComingGroup = (TextView) upComingMovieView.findViewById(R.id.group_name);
         upComingGroup.setText("即将上映");
-
         top250View = mView.findViewById(R.id.top_250);
         top250Recyclerview = (RecyclerView) top250View.findViewById(R.id.recyclerview);
         RobinSnapHelper robinSnapHelper1 = new RobinSnapHelper();
         robinSnapHelper1.attachToRecyclerView(top250Recyclerview);
         top250Group = (TextView) top250View.findViewById(R.id.group_name);
         top250Group.setText("Top250");
-
         boxOfficeView = mView.findViewById(R.id.box_office);
         boxOfficeRecyclerview = (RecyclerView) boxOfficeView.findViewById(R.id.recyclerview);
         RobinSnapHelper robinSnapHelper2 = new RobinSnapHelper();
@@ -98,13 +106,13 @@ public class MovieFragment extends Fragment {
         mMZBannerView = (MZBannerView) mView.findViewById(R.id.banner);
         mMZBannerView.setIndicatorVisible(true);
         loadVideo("http://api.douban.com/v2/movie/in_theaters");
-        load("http://api.douban.com/v2/movie/coming_soon",upComingList,UPCOMING_LOADFINISH);
-        load("http://api.douban.com/v2/movie/top250",top250List,TOP250_LOADFINISH);
-        loadBoxOffice("http://api.douban.com/v2/movie/us_box",boxOfficeList,BOXOFFICE_LOADFINISH);
-        mHandler = new Handler(){
+        load("http://api.douban.com/v2/movie/coming_soon", upComingList, UPCOMING_LOADFINISH);
+        load("http://api.douban.com/v2/movie/top250", top250List, TOP250_LOADFINISH);
+        loadBoxOffice("http://api.douban.com/v2/movie/us_box", boxOfficeList, BOXOFFICE_LOADFINISH);
+        mHandler = new Handler() {
             @Override
             public void handleMessage(Message msg) {
-                switch (msg.what){
+                switch (msg.what) {
                     case HOTMOVIE_LOADFINISH:
                         mMZBannerView.setPages(hotMovieList, new MZHolderCreator<MovieFragment.BannerViewHolder>() {
                             @Override
@@ -114,26 +122,35 @@ public class MovieFragment extends Fragment {
                         });
                         break;
                     case UPCOMING_LOADFINISH:
-                        setRecyclerview(upComingList,upComingRecyclerview);
+                        count++;
                         break;
                     case TOP250_LOADFINISH:
-                        setRecyclerview(top250List,top250Recyclerview);
+                        count++;
                         break;
                     case BOXOFFICE_LOADFINISH:
-                        setRecyclerview(boxOfficeList,boxOfficeRecyclerview);
+                        count++;
                         break;
                     default:
                         break;
                 }
+                if (count==3){
+                    progressBar.setVisibility(View.GONE);
+                    setRecyclerview(upComingList, upComingRecyclerview);
+                    setRecyclerview(top250List, top250Recyclerview);
+                    setRecyclerview(boxOfficeList, boxOfficeRecyclerview);
+                    linearMovie.setVisibility(View.VISIBLE);
+                }
             }
         };
     }
+
     public static class BannerViewHolder implements MZViewHolder<VideoHelper> {
         private ImageView mImageView;
+
         @Override
         public View createView(Context context) {
             // 返回页面布局文件
-            View view = LayoutInflater.from(context).inflate(R.layout.banner_item,null);
+            View view = LayoutInflater.from(context).inflate(R.layout.banner_item, null);
 
             mImageView = (ImageView) view.findViewById(R.id.banner_image);
             return view;
@@ -162,7 +179,7 @@ public class MovieFragment extends Fragment {
                 try {
                     JSONObject JSONObject = new JSONObject(responseData);
                     JSONArray jsonArray = new JSONArray(JSONObject.getString("subjects"));
-                    for (int i = 0;i<5;i++){
+                    for (int i = 0; i < 5; i++) {
                         VideoHelper video = new VideoHelper();
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         video.setTitle(jsonObject.getString("title"));
@@ -170,15 +187,16 @@ public class MovieFragment extends Fragment {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("images");
                         video.setImageUrl(jsonObject1.getString("medium"));
                         hotMovieList.add(video);
-                        mHandler.sendEmptyMessage(HOTMOVIE_LOADFINISH);
                     }
-                }catch (Exception E){
+                    mHandler.sendEmptyMessage(HOTMOVIE_LOADFINISH);
+                } catch (Exception E) {
                     E.printStackTrace();
                 }
             }
         });
     }
-    private void load(String url, final List<VideoHelper> videoList,final int LOADFINISH){
+
+    private void load(String url, final List<VideoHelper> videoList, final int LOADFINISH) {
         HttpUtil.sendOkhttpRequest(url, new okhttp3.Callback() {
 
             @Override
@@ -192,7 +210,7 @@ public class MovieFragment extends Fragment {
                 try {
                     JSONObject JSONObject = new JSONObject(responseData);
                     JSONArray jsonArray = new JSONArray(JSONObject.getString("subjects"));
-                    for (int i = 0;i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         VideoHelper video = new VideoHelper();
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         video.setTitle(jsonObject.getString("title"));
@@ -200,16 +218,16 @@ public class MovieFragment extends Fragment {
                         JSONObject jsonObject1 = jsonObject.getJSONObject("images");
                         video.setImageUrl(jsonObject1.getString("medium"));
                         videoList.add(video);
-                        mHandler.sendEmptyMessage(LOADFINISH);
                     }
-                }catch (Exception E){
+                    mHandler.sendEmptyMessage(LOADFINISH);
+                } catch (Exception E) {
                     E.printStackTrace();
                 }
             }
         });
     }
 
-    private void loadBoxOffice(String url, final List<VideoHelper> videoList,final int LOADFINISH){
+    private void loadBoxOffice(String url, final List<VideoHelper> videoList, final int LOADFINISH) {
         HttpUtil.sendOkhttpRequest(url, new okhttp3.Callback() {
 
             @Override
@@ -223,7 +241,7 @@ public class MovieFragment extends Fragment {
                 try {
                     JSONObject JSONObject = new JSONObject(responseData);
                     JSONArray jsonArray = new JSONArray(JSONObject.getString("subjects"));
-                    for (int i = 0;i<jsonArray.length();i++){
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         VideoHelper video = new VideoHelper();
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         JSONObject jsonObject1 = jsonObject.getJSONObject("subject");
@@ -232,25 +250,28 @@ public class MovieFragment extends Fragment {
                         JSONObject jsonObject2 = jsonObject1.getJSONObject("images");
                         video.setImageUrl(jsonObject2.getString("medium"));
                         videoList.add(video);
-                        mHandler.sendEmptyMessage(LOADFINISH);
+
                     }
-                }catch (Exception E){
+                    mHandler.sendEmptyMessage(LOADFINISH);
+                } catch (Exception E) {
                     E.printStackTrace();
                 }
             }
         });
     }
-    private void setRecyclerview(final List<VideoHelper> videoHelperList, RecyclerView recyclerView){
+
+    private void setRecyclerview(final List<VideoHelper> videoHelperList, RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        Log.d("setrecycler", "setRecyclerview: ");
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
-        RecyclerviewAdapter adapter1 = new RecyclerviewAdapter(R.layout.movie_recyclerview_item,videoHelperList,getContext());
+        RecyclerviewAdapter adapter1 = new RecyclerviewAdapter(R.layout.movie_recyclerview_item, videoHelperList, getContext());
         recyclerView.setAdapter(adapter1);
         adapter1.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
                 Intent intent = new Intent(getActivity(), ArticalActivity.class);
-                intent.putExtra("id",videoHelperList.get(position).getId());
+                intent.putExtra("id", videoHelperList.get(position).getId());
                 startActivity(intent);
             }
         });

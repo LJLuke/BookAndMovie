@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,15 +49,25 @@ public class ArticalActivity extends AppCompatActivity {
     private TextView catalog;
     private ImageView moreCatalog;
     private BookHelper helper;
+    private TextView movieOrBook;
     private LinearLayout linearLayout;
     private Handler mHandler;
     private static final int LOADFINISH = 0;
     private DetailMovie detailMovie;
+    private CollapsingToolbarLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artical);
+        movieOrBook = (TextView)findViewById(R.id.movieorbook);
+        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        layout= (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar=getSupportActionBar();
+        if (actionBar!=null){
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         bookImg = (ImageView) findViewById(R.id.book_img);
         bookName = (TextView) findViewById(R.id.books_name);
         authorName = (TextView) findViewById(R.id.author);
@@ -92,10 +105,12 @@ public class ArticalActivity extends AppCompatActivity {
     }
 
     private void initBookView() {
+        movieOrBook.setText("图书");
         helper = getIntent().getParcelableExtra("bookInfo");
         linearLayout.setBackgroundResource(getLuckColor());
         Glide.with(this).load(helper.getImg()).centerCrop().into(bookImg);
         bookName.setText(helper.getBookName());
+        layout.setTitle(" ");
         authorName.setText("作者：" + helper.getAuthor());
         publisher.setText("出版社：" + helper.getPublishing());
         publishData.setText("出版日期：" + helper.getPubData());
@@ -135,6 +150,7 @@ public class ArticalActivity extends AppCompatActivity {
     }
 
     private void initMovieView(){
+        movieOrBook.setText("电影");
         linearLayout.setBackgroundResource(getLuckColor());
         Glide.with(this).load(detailMovie.getImageUrl()).asBitmap().into(bookImg);
         bookName.setText(detailMovie.getTitle());

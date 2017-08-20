@@ -1,40 +1,51 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              tools:context="com.example.lijiang.bookandmovie.fragments.MovieFragment">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.v4.widget.NestedScrollView
+    <ProgressBar
+        android:id="@+id/progress_movie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <LinearLayout
+        android:id="@+id/linear_movie"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            android:orientation="vertical"
+
+        <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.zhouwei.mzbanner.MZBannerView
-                android:id="@+id/banner"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginTop="10dp"
-                app:open_mz_mode="true"
-                app:canLoop="true"
-                />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <include
-                android:id="@+id/upcoming_movies"
-                layout="@layout/tool_item"/>
-            <include
-                android:id="@+id/top_250"
-                layout="@layout/tool_item"/>
-            <include
-                android:id="@+id/box_office"
-                layout="@layout/tool_item"/>
-        </LinearLayout>
+                <com.zhouwei.mzbanner.MZBannerView
+                    android:id="@+id/banner"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="10dp"
+                    app:canLoop="true"
+                    app:open_mz_mode="true" />
+
+                <include
+                    android:id="@+id/upcoming_movies"
+                    layout="@layout/tool_item" />
+
+                <include
+                    android:id="@+id/top_250"
+                    layout="@layout/tool_item" />
+
+                <include
+                    android:id="@+id/box_office"
+                    layout="@layout/tool_item" />
+            </LinearLayout>
 
 
+        </android.support.v4.widget.NestedScrollView>
 
-    </android.support.v4.widget.NestedScrollView>
-
-</LinearLayout>
+    </LinearLayout>
+</FrameLayout>

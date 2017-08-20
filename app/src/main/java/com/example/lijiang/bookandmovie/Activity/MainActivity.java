@@ -24,15 +24,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     private ArrayList<String> spinnerList = new ArrayList<>();
     private Spinner spinner;
-    private Fragment wherearei;
     private BookFragment bookFragment = new BookFragment();
     private MovieFragment movieFragment = new MovieFragment();
-    public LinearLayout linearLayout;
     public int fragmentStatus = 0;
-    private int count = 0;
-    private TabLayout mTabLayout;
+    public TabLayout mTabLayout;
     private TabPagerAdapter mPagerAdapter;
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
     private List<Fragment> mFragmentList = new ArrayList<>();
 
 
@@ -43,16 +40,14 @@ public class MainActivity extends AppCompatActivity {
         spinnerList.add("电影");
         spinnerList.add("图书");
         spinner = (Spinner) findViewById(R.id.spinner);
-
         mFragmentList.add(movieFragment);
         mFragmentList.add(bookFragment);
-        mPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(),spinnerList,mFragmentList);
+        mPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), spinnerList, mFragmentList);
         mViewPager = (ViewPager) findViewById(R.id.tab_viewpager);
         mViewPager.setAdapter(mPagerAdapter);
         mTabLayout = (TabLayout) findViewById(R.id.tablayout);
         mTabLayout.setTabMode(TabLayout.MODE_FIXED);
         mTabLayout.setupWithViewPager(mViewPager);
-
         ArrayAdapter adapter = new ArrayAdapter(MainActivity.this, android.R.layout.simple_spinner_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -62,7 +57,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (fragmentStatus == 1) {
-            this.linearLayout.setVisibility(View.VISIBLE);
+            this.mTabLayout.setVisibility(View.VISIBLE);
+            this.mViewPager.setVisibility(View.VISIBLE);
             fragmentStatus = 0;
         }
         super.onBackPressed();
