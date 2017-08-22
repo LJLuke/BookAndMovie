@@ -21,7 +21,6 @@
                 android:id="@+id/change_color"
                 android:layout_width="match_parent"
                 android:layout_height="320dp"
-                android:background="#38ccd6"
                 android:orientation="vertical"
                 app:layout_collapseMode="parallax">
                 <android.support.v7.widget.Toolbar

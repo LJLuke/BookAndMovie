@@ -1,66 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
+        android:background="#60c473"
         android:layout_width="match_parent"
-        android:layout_height="56dp">
-
-        <android.support.v7.widget.Toolbar
+        android:layout_height="40dp">
+        <android.support.v7.widget.CardView
+            android:layout_gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#ffff"
-            android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="7dp">
 
             <LinearLayout
+
+                android:background="#ffff"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-                <Spinner
-                    android:layout_gravity="center"
-                    android:id="@+id/spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="2"
-                    android:theme="@style/SpinnerStyle">
-
-                </Spinner>
-
-                <EditText
-                    android:layout_gravity="center"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:hint=" 电影/图书"
-                    android:textSize="15sp"/>
-
+                android:layout_height="25dp"
+                android:orientation="horizontal">
                 <ImageView
+                    android:src="@drawable/search"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
-                    android:layout_weight="1"
-                    android:src="@drawable/search" />
+                    android:layout_weight="1"/>
+                <TextView
+                    android:id="@+id/tv_top"
+                    android:hint="影视 图书"
+                    android:layout_gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_height="20dp"
+                    android:layout_weight="8"/>
             </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-        </android.support.v7.widget.Toolbar>
-    </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
 
-    </android.support.design.widget.TabLayout>
+    </LinearLayout>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/tab_viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
+        </android.support.design.widget.TabLayout>
+        <android.support.v4.view.ViewPager
+            android:id="@+id/tab_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
 
-    </android.support.v4.view.ViewPager>
+        </android.support.v4.view.ViewPager>
+
+
     <FrameLayout
         android:id="@+id/framlayout"
         android:layout_width="match_parent"

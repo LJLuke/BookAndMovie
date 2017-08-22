@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -24,6 +26,7 @@ import com.example.lijiang.bookandmovie.fragments.DetialFragment;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.zackratos.ultimatebar.UltimateBar;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class ArticalActivity extends AppCompatActivity {
     private TextView manNum;
     private TextView summary;
     private ImageView moreSummary;
+    private int color;
     private TextView authorInfo;
     private ImageView moreAuthorInfo;
     private TextView catalog;
@@ -60,6 +64,8 @@ public class ArticalActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artical);
+        color = getLuckColor();
+        Log.d("color2",color+"");
         movieOrBook = (TextView)findViewById(R.id.movieorbook);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         layout= (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
@@ -83,6 +89,10 @@ public class ArticalActivity extends AppCompatActivity {
         catalog = (TextView) findViewById(R.id.catalog);
         moreCatalog = (ImageView) findViewById(R.id.more_catalog);
         linearLayout = (LinearLayout) findViewById(R.id.change_color);
+
+        UltimateBar ultimateBar = new UltimateBar(this);
+        ultimateBar.setColorBar(ContextCompat.getColor(this, color),50);
+
         if (getIntent().getStringExtra("id")==null){
             initBookView();
         }else {
@@ -107,7 +117,8 @@ public class ArticalActivity extends AppCompatActivity {
     private void initBookView() {
         movieOrBook.setText("图书");
         helper = getIntent().getParcelableExtra("bookInfo");
-        linearLayout.setBackgroundResource(getLuckColor());
+        linearLayout.setBackgroundResource(color);
+        Log.d("color1",color+"");
         Glide.with(this).load(helper.getImg()).centerCrop().into(bookImg);
         bookName.setText(helper.getBookName());
         layout.setTitle(" ");
@@ -150,8 +161,8 @@ public class ArticalActivity extends AppCompatActivity {
     }
 
     private void initMovieView(){
+        linearLayout.setBackgroundResource(color);
         movieOrBook.setText("电影");
-        linearLayout.setBackgroundResource(getLuckColor());
         Glide.with(this).load(detailMovie.getImageUrl()).asBitmap().into(bookImg);
         bookName.setText(detailMovie.getTitle());
         authorName.setText("年代："+detailMovie.getYear());
