@@ -30,7 +30,6 @@ public class MoreBooksFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_morebooks, container, false);
         ((MainActivity)getActivity()).mTabLayout.setVisibility(View.GONE);
         ((MainActivity)getActivity()).mViewPager.setVisibility(View.GONE);

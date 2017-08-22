@@ -9,7 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,12 +46,12 @@ public class ArticalActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private TextView manNum;
     private TextView summary;
-    private ImageView moreSummary;
-    private int color;
+    private LinearLayout moreSummary;
     private TextView authorInfo;
-    private ImageView moreAuthorInfo;
+    private LinearLayout moreAuthorInfo;
     private TextView catalog;
-    private ImageView moreCatalog;
+    private int color;
+    private LinearLayout moreCatalog;
     private BookHelper helper;
     private TextView movieOrBook;
     private LinearLayout linearLayout;
@@ -65,13 +65,12 @@ public class ArticalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_artical);
         color = getLuckColor();
-        Log.d("color2",color+"");
-        movieOrBook = (TextView)findViewById(R.id.movieorbook);
-        Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
-        layout= (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
+        movieOrBook = (TextView) findViewById(R.id.movieorbook);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        layout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         setSupportActionBar(toolbar);
-        ActionBar actionBar=getSupportActionBar();
-        if (actionBar!=null){
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
         bookImg = (ImageView) findViewById(R.id.book_img);
@@ -83,26 +82,25 @@ public class ArticalActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.stars);
         manNum = (TextView) findViewById(R.id.num_men);
         summary = (TextView) findViewById(R.id.summary);
-        moreSummary = (ImageView) findViewById(R.id.more_summary);
+        moreSummary = (LinearLayout) findViewById(R.id.more_summary);
         authorInfo = (TextView) findViewById(R.id.author_info);
-        moreAuthorInfo = (ImageView) findViewById(R.id.more_authorinfo);
+        moreAuthorInfo = (LinearLayout) findViewById(R.id.more_authorinfo);
         catalog = (TextView) findViewById(R.id.catalog);
-        moreCatalog = (ImageView) findViewById(R.id.more_catalog);
-        linearLayout = (LinearLayout) findViewById(R.id.change_color);
-
         UltimateBar ultimateBar = new UltimateBar(this);
         ultimateBar.setColorBar(ContextCompat.getColor(this, color),50);
 
-        if (getIntent().getStringExtra("id")==null){
+        moreCatalog = (LinearLayout) findViewById(R.id.more_catalog);
+        linearLayout = (LinearLayout) findViewById(R.id.change_color);
+        if (getIntent().getStringExtra("id") == null) {
             initBookView();
-        }else {
+        } else {
             String id = getIntent().getStringExtra("id");
-            load("http://api.douban.com/v2/movie/subject/"+id);
+            load("http://api.douban.com/v2/movie/subject/" + id);
 
-            mHandler = new Handler(){
+            mHandler = new Handler() {
                 @Override
                 public void handleMessage(Message msg) {
-                    switch (msg.what){
+                    switch (msg.what) {
                         case LOADFINISH:
                             initMovieView();
                             break;
@@ -114,11 +112,20 @@ public class ArticalActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private void initBookView() {
         movieOrBook.setText("图书");
         helper = getIntent().getParcelableExtra("bookInfo");
         linearLayout.setBackgroundResource(color);
-        Log.d("color1",color+"");
         Glide.with(this).load(helper.getImg()).centerCrop().into(bookImg);
         bookName.setText(helper.getBookName());
         layout.setTitle(" ");
@@ -160,20 +167,21 @@ public class ArticalActivity extends AppCompatActivity {
         });
     }
 
-    private void initMovieView(){
-        linearLayout.setBackgroundResource(color);
+    private void initMovieView() {
         movieOrBook.setText("电影");
+        linearLayout.setBackgroundResource(color);
         Glide.with(this).load(detailMovie.getImageUrl()).asBitmap().into(bookImg);
         bookName.setText(detailMovie.getTitle());
-        authorName.setText("年代："+detailMovie.getYear());
-        publisher.setText("类型："+detailMovie.getGenres());
-        publishData.setText("国家："+detailMovie.getCountries());
-        score.setText(detailMovie.getAverage()+"");
-        ratingBar.setRating(Float.parseFloat(detailMovie.getStars())/10);
-        manNum.setText(detailMovie.getRatingsCount()+"");
+        authorName.setText("年代：" + detailMovie.getYear());
+        publisher.setText("类型：" + detailMovie.getGenres());
+        publishData.setText("国家：" + detailMovie.getCountries());
+        score.setText(detailMovie.getAverage() + "");
+        ratingBar.setRating(Float.parseFloat(detailMovie.getStars()) / 10);
+        manNum.setText(detailMovie.getRatingsCount() + "");
         summary.setText(detailMovie.getSummary());
-        
+
     }
+
     private int getLuckColor() {
         int[] colors = {R.color.colorLuck_1, R.color.colorLuck_2, R.color.colorLuck_3, R.color.colorLuck_4, R.color.colorLuck_5};
         Random random = new Random();
@@ -181,7 +189,7 @@ public class ArticalActivity extends AppCompatActivity {
         return colors[color];
     }
 
-    private void load(String url){
+    private void load(String url) {
         HttpUtil.sendOkhttpRequest(url, new okhttp3.Callback() {
 
             @Override
@@ -207,7 +215,7 @@ public class ArticalActivity extends AppCompatActivity {
                     detailMovie.setRatingsCount(JSONObject.getInt("ratings_count"));
                     detailMovie.setSummary(JSONObject.getString("summary"));
                     mHandler.sendEmptyMessage(LOADFINISH);
-                }catch (Exception E){
+                } catch (Exception E) {
                     E.printStackTrace();
                 }
             }
