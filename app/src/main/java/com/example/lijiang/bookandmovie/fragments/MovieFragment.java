@@ -59,7 +59,8 @@ public class MovieFragment extends Fragment {
     private TextView boxOfficeGroup;
     private LinearLayout linearMovie;
     private ProgressBar progressBar;
-    private int count=0;
+    private ImageView imageView;
+    private int count = 0;
     private MZBannerView mMZBannerView;
     static List<VideoHelper> hotMovieList = new ArrayList<>();
     private List<VideoHelper> upComingList = new ArrayList<>();
@@ -83,6 +84,7 @@ public class MovieFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         linearMovie = (LinearLayout) mView.findViewById(R.id.linear_movie);
         progressBar = (ProgressBar) mView.findViewById(R.id.progress_movie);
+        imageView = (ImageView) view.findViewById(R.id.image_hide);
         linearMovie.setVisibility(View.INVISIBLE);
         upComingMovieView = mView.findViewById(R.id.upcoming_movies);
         upComingRecyclerview = (RecyclerView) upComingMovieView.findViewById(R.id.recyclerview);
@@ -133,7 +135,7 @@ public class MovieFragment extends Fragment {
                     default:
                         break;
                 }
-                if (count==3){
+                if (count == 3) {
                     progressBar.setVisibility(View.GONE);
                     setRecyclerview(upComingList, upComingRecyclerview);
                     setRecyclerview(top250List, top250Recyclerview);
@@ -164,12 +166,23 @@ public class MovieFragment extends Fragment {
         }
     }
 
+    private void stopShow() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.GONE);
+                imageView.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
+
     private void loadVideo(String videoUrl) {
         HttpUtil.sendOkhttpRequest(videoUrl, new okhttp3.Callback() {
 
             @Override
             public void onFailure(Call call, IOException e) {
-
+                    stopShow();
             }
 
             @Override
@@ -189,8 +202,8 @@ public class MovieFragment extends Fragment {
                         hotMovieList.add(video);
                     }
                     mHandler.sendEmptyMessage(HOTMOVIE_LOADFINISH);
-                } catch (Exception E) {
-                    E.printStackTrace();
+                } catch (Exception e) {
+                    stopShow();
                 }
             }
         });
@@ -201,7 +214,7 @@ public class MovieFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, IOException e) {
-
+                    stopShow();
             }
 
             @Override
@@ -221,7 +234,7 @@ public class MovieFragment extends Fragment {
                     }
                     mHandler.sendEmptyMessage(LOADFINISH);
                 } catch (Exception E) {
-                    E.printStackTrace();
+                    stopShow();
                 }
             }
         });
@@ -232,7 +245,7 @@ public class MovieFragment extends Fragment {
 
             @Override
             public void onFailure(Call call, IOException e) {
-
+                    stopShow();
             }
 
             @Override
@@ -254,7 +267,7 @@ public class MovieFragment extends Fragment {
                     }
                     mHandler.sendEmptyMessage(LOADFINISH);
                 } catch (Exception E) {
-                    E.printStackTrace();
+                    stopShow();
                 }
             }
         });

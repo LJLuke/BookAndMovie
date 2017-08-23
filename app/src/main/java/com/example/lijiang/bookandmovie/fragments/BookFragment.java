@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.lijiang.bookandmovie.R;
@@ -42,7 +44,7 @@ import okhttp3.Response;
 public class BookFragment extends Fragment {
     private static final String TAG = "BookFragment";
     private View view;
-    private int count =0;
+    private int count = 0;
     private List<Integer> pagers = new ArrayList<>();
     private List<BookHelper> bookImgs = new ArrayList<>();
     public static List<BookHelper> sportSources = new ArrayList<>();
@@ -59,6 +61,8 @@ public class BookFragment extends Fragment {
     private TextView warmText;
     private TextView imageText;
     private TextView literatrueText;
+    private ImageView imageHide;
+    private ScrollView scrollview;
     private List<TextView> texts = new ArrayList<>();
     private List[] textLists = {romanticSources, warmSources, imageSources, literatrueSources};
     private int ids[] = {R.id.nice_book, R.id.science_book, R.id.sport_book, R.id.magic_theme, R.id.classic_theme};
@@ -70,6 +74,10 @@ public class BookFragment extends Fragment {
             switch (msg.what) {
                 case 1:
                     beginShow();
+                    break;
+                case 0:
+                    stopShow();
+                    break;
             }
         }
     };
@@ -77,12 +85,13 @@ public class BookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.d(TAG, "onCreateView: "+"我被重新调用了吗");
+        Log.d(TAG, "onCreateView: " + "我被重新调用了吗");
         view = inflater.inflate(R.layout.fragment_book, container, false);
         View tempView = view.findViewById(R.id.buttons);
-
+        scrollview = (ScrollView)view.findViewById(R.id.scroll_hide);
+        imageHide = (ImageView)view.findViewById(R.id.image_hide);
         romanticText = (TextView) tempView.findViewById(R.id.text_romantic);
-        imageText =(TextView) tempView.findViewById(R.id.text_image);
+        imageText = (TextView) tempView.findViewById(R.id.text_image);
         warmText = (TextView) tempView.findViewById(R.id.text_warm);
         literatrueText = (TextView) tempView.findViewById(R.id.text_literatrue);
         texts.add(romanticText);
@@ -107,9 +116,11 @@ public class BookFragment extends Fragment {
         pagers.add(R.drawable.sport_img);
         return view;
     }
+
     private void beginShow() {
+        imageHide.setVisibility(View.GONE);
         getRandomBooks();
-        RecyclerView titleRecycler =(RecyclerView) view.findViewById(R.id.title_recycler);
+        RecyclerView titleRecycler = (RecyclerView) view.findViewById(R.id.title_recycler);
         PagerSnapHelper snapHelper = new PagerSnapHelper();
         snapHelper.attachToRecyclerView(titleRecycler);
         LinearLayoutManager manager = new LinearLayoutManager(getContext());
@@ -124,6 +135,10 @@ public class BookFragment extends Fragment {
             setMyOnclickListener(texts.get(i), textLists[i]);
         }
 
+    }
+
+    private void stopShow() {
+            scrollview.setVisibility(View.GONE);
     }
 
     private void showBooks(int id, String title, final List<BookHelper> list) {
@@ -147,7 +162,7 @@ public class BookFragment extends Fragment {
         recyclerView.setLayoutManager(manager);
         ThemeAdapter adapter = new ThemeAdapter(list, getActivity());
         recyclerView.setAdapter(adapter);
-        TextView textView =(TextView) tempView.findViewById(R.id.part_title);
+        TextView textView = (TextView) tempView.findViewById(R.id.part_title);
         textView.setText(title);
 
     }
@@ -157,64 +172,65 @@ public class BookFragment extends Fragment {
         HttpUtil.sendOkhttpRequest(url + tag, new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-
+                sendMyMessage(0);
             }
 
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String responseDate = response.body().string();
-                parseJSONWithGSON(responseDate, list);
-                sendMyMessage();
+                try {
+                    parseJSONWithGSON(responseDate, list);
+                    sendMyMessage(1);
+                } catch (Exception e) {
+                    sendMyMessage(0);
+                }
+
+
             }
         });
     }
 
-    private void parseJSONWithGSON(String jsonData, List list) {
-        try {
-
-            JSONObject jo = new JSONObject(jsonData);
-            JSONArray array = jo.getJSONArray("books");
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject tempObject = array.getJSONObject(i);
-                BookHelper helper = new BookHelper();
-                helper.setBookName(tempObject.get("title").toString());
-                JSONObject ja = tempObject.getJSONObject("images");
-                helper.setImg(ja.getString("large"));
-                JSONArray authorArray = tempObject.getJSONArray("author");
-                String authorName = authorArray.getString(0);
-                helper.setAuthor(authorName);
-                String publisher = tempObject.getString("publisher");
-                helper.setPublishing(publisher);
-                double rating = tempObject.getJSONObject("rating").getDouble("average");
-                helper.setRating(rating);
-                String summary = tempObject.getString("summary");
-                helper.setWords(summary);
-                String catalog = tempObject.getString("catalog");
-                helper.setCatalog(catalog);
-                String pubData = tempObject.getString("pubdate");
-                helper.setPubData(pubData);
-                String authorInfo = tempObject.getString("author_intro");
-                helper.setAuthorInfo(authorInfo);
-                int manNum = tempObject.getJSONObject("rating").getInt("numRaters");
-                helper.setManNum(manNum);
-                list.add(helper);
-
-            }
+    private void parseJSONWithGSON(String jsonData, List list) throws Exception {
 
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.d(TAG, "parseJSONWithGSON: ");
+        JSONObject jo = new JSONObject(jsonData);
+        JSONArray array = jo.getJSONArray("books");
+
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject tempObject = array.getJSONObject(i);
+            BookHelper helper = new BookHelper();
+            helper.setBookName(tempObject.get("title").toString());
+            JSONObject ja = tempObject.getJSONObject("images");
+            helper.setImg(ja.getString("large"));
+            JSONArray authorArray = tempObject.getJSONArray("author");
+            String authorName = authorArray.getString(0);
+            helper.setAuthor(authorName);
+            String publisher = tempObject.getString("publisher");
+            helper.setPublishing(publisher);
+            double rating = tempObject.getJSONObject("rating").getDouble("average");
+            helper.setRating(rating);
+            String summary = tempObject.getString("summary");
+            helper.setWords(summary);
+            String catalog = tempObject.getString("catalog");
+            helper.setCatalog(catalog);
+            String pubData = tempObject.getString("pubdate");
+            helper.setPubData(pubData);
+            String authorInfo = tempObject.getString("author_intro");
+            helper.setAuthorInfo(authorInfo);
+            int manNum = tempObject.getJSONObject("rating").getInt("numRaters");
+            helper.setManNum(manNum);
+            list.add(helper);
 
         }
 
+
     }
 
-    private void sendMyMessage() {
+    private void sendMyMessage(int mode) {
         count++;
         if (count == 10) {
             Message message = new Message();
-            message.what = 1;
+            message.what = mode;
             hander.sendMessage(message);
         }
     }
