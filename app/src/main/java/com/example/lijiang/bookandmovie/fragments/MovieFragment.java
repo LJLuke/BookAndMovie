@@ -124,12 +124,18 @@ public class MovieFragment extends Fragment {
                         });
                         break;
                     case UPCOMING_LOADFINISH:
+                        TextView tv_up_all = (TextView) upComingMovieView.findViewById(R.id.all);
+                        tv_up_all.setText("全部"+" "+upComingList.size());
                         count++;
                         break;
                     case TOP250_LOADFINISH:
+                        TextView tv_top_all = (TextView)  top250View.findViewById(R.id.all);
+                        tv_top_all.setText("全部"+" "+top250List.size());
                         count++;
                         break;
                     case BOXOFFICE_LOADFINISH:
+                        TextView tv_box_all = (TextView) boxOfficeView.findViewById(R.id.all);
+                        tv_box_all.setText("全部"+" "+boxOfficeList.size());
                         count++;
                         break;
                     default:

@@ -248,6 +248,7 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_categray"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
                 android:layout_marginLeft="10dp"

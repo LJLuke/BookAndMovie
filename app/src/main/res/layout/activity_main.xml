@@ -8,7 +8,7 @@
     <LinearLayout
         android:background="#60c473"
         android:layout_width="match_parent"
-        android:layout_height="40dp">
+        android:layout_height="50dp">
         <android.support.v7.widget.CardView
             android:layout_gravity="center"
             android:layout_marginLeft="10dp"
@@ -23,7 +23,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="25dp"
+                android:layout_height="35dp"
                 android:orientation="horizontal">
                 <ImageView
                     android:src="@drawable/search"
@@ -37,7 +37,8 @@
                     android:layout_gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="20dp"
-                    android:layout_weight="8"/>
+                    android:layout_weight="8"
+                    android:textSize="15sp"/>
             </LinearLayout>
         </android.support.v7.widget.CardView>
 
