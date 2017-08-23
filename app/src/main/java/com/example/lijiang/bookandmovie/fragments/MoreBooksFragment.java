@@ -31,10 +31,13 @@ public class MoreBooksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_morebooks, container, false);
-        ((MainActivity)getActivity()).mTabLayout.setVisibility(View.GONE);
-        ((MainActivity)getActivity()).mViewPager.setVisibility(View.GONE);
-        ((MainActivity)getActivity()).fragmentStatus=1;
+        if (getActivity() instanceof MainActivity){
+            ((MainActivity)getActivity()).mTabLayout.setVisibility(View.GONE);
+            ((MainActivity)getActivity()).mViewPager.setVisibility(View.GONE);
+            ((MainActivity)getActivity()).fragmentStatus=1;
+        }
         helpers = getArguments().getParcelableArrayList("list");
+        Log.d("test2", "onCreateView: "+helpers.size());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_morebooks);
         MoreBooksAdapter adapter = new MoreBooksAdapter(helpers, getActivity());
