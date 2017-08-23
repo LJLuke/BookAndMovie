@@ -8,6 +8,8 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,8 +19,11 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.Utils.HttpUtil;
+import com.example.lijiang.bookandmovie.adapters.ActorRecyclerViewAdapter;
+import com.example.lijiang.bookandmovie.adapters.RecyclerviewAdapter;
 import com.example.lijiang.bookandmovie.entities.Actors;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
 import com.example.lijiang.bookandmovie.entities.DetailMovie;
@@ -47,12 +52,12 @@ public class ArticalActivity extends AppCompatActivity {
     private RatingBar ratingBar;
     private TextView manNum;
     private TextView summary;
-    private ImageView moreSummary;
+    private LinearLayout moreSummary;
     private int color;
     private TextView authorInfo;
-    private ImageView moreAuthorInfo;
+    private LinearLayout moreAuthorInfo;
     private TextView catalog;
-    private ImageView moreCatalog;
+    private LinearLayout moreCatalog;
     private BookHelper helper;
     private TextView movieOrBook;
     private LinearLayout linearLayout;
@@ -61,6 +66,9 @@ public class ArticalActivity extends AppCompatActivity {
     private DetailMovie detailMovie;
     private CollapsingToolbarLayout layout;
     private List<Actors> mActorsList = new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private LinearLayout ll_movie_change_view;
+    private LinearLayout ll_book_change_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +93,11 @@ public class ArticalActivity extends AppCompatActivity {
         ratingBar = (RatingBar) findViewById(R.id.stars);
         manNum = (TextView) findViewById(R.id.num_men);
         summary = (TextView) findViewById(R.id.summary);
-        moreSummary = (ImageView) findViewById(R.id.more_summary);
+        moreSummary = (LinearLayout) findViewById(R.id.more_summary);
         authorInfo = (TextView) findViewById(R.id.author_info);
-        moreAuthorInfo = (ImageView) findViewById(R.id.more_authorinfo);
+        moreAuthorInfo = (LinearLayout) findViewById(R.id.more_authorinfo);
         catalog = (TextView) findViewById(R.id.catalog);
-        moreCatalog = (ImageView) findViewById(R.id.more_catalog);
+        moreCatalog = (LinearLayout) findViewById(R.id.more_catalog);
         linearLayout = (LinearLayout) findViewById(R.id.change_color);
 
         UltimateBar ultimateBar = new UltimateBar(this);
@@ -116,6 +124,20 @@ public class ArticalActivity extends AppCompatActivity {
 
     }
 
+    private void setRecyclerview() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.actor_recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        ActorRecyclerViewAdapter adapter1 = new ActorRecyclerViewAdapter(R.layout.actor_recyclerview_item, mActorsList, this);
+        mRecyclerView.setAdapter(adapter1);
+        adapter1.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+            }
+        });
+    }
     private void initBookView() {
         movieOrBook.setText("图书");
         helper = getIntent().getParcelableExtra("bookInfo");
@@ -143,13 +165,13 @@ public class ArticalActivity extends AppCompatActivity {
             }
         });
         moreSummary.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Bundle bundle = new Bundle();
-                bundle.putInt("type", 2);
-                bundle.putString("data", helper.getWords());
-                DetialFragment.newInstance(bundle).show(getFragmentManager(), "");
-            }
+                @Override
+                public void onClick(View view) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 2);
+                    bundle.putString("data", helper.getWords());
+                    DetialFragment.newInstance(bundle).show(getFragmentManager(), "");
+                }
         });
         moreAuthorInfo.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -174,8 +196,18 @@ public class ArticalActivity extends AppCompatActivity {
         ratingBar.setRating(Float.parseFloat(detailMovie.getStars())/10);
         manNum.setText(detailMovie.getRatingsCount()+"");
         summary.setText(detailMovie.getSummary());
-        TextView tv_cate = (TextView) findViewById(R.id.tv_categray);
-        tv_cate.setVisibility(View.GONE);
+        moreSummary.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Bundle bundle = new Bundle();
+                bundle.putInt("type", 2);
+                bundle.putString("data", detailMovie.getSummary());
+                DetialFragment.newInstance(bundle).show(getFragmentManager(), "");
+            }
+        });
+        ll_book_change_view = (LinearLayout) findViewById(R.id.book_change_view);
+        ll_book_change_view.setVisibility(View.GONE);
+        setRecyclerview();
         
     }
     private int getLuckColor() {

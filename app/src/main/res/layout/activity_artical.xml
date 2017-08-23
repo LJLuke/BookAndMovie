@@ -121,7 +121,7 @@
                         android:layout_marginTop="3dp"
                         android:gravity="center_vertical"
                         android:text="出版日期:"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"/>
 
                 </LinearLayout>
 
@@ -206,78 +206,99 @@
                     android:layout_marginLeft="10dp"
                     android:lines="4"
                     android:text="a\nb" />
-
                 <ImageView
-
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_gravity="center"
                     android:layout_marginLeft="30dp"
                     android:src="@drawable/ic_chevron_right_black_24dp" />
             </LinearLayout>
-
-            <TextView
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/movie_change_view"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="作者"
-                android:textSize="11sp" />
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_marginLeft="10dp"
+                    android:text="影人"
+                    android:layout_width="match_parent"
+                    android:layout_height="20dp"/>
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/actor_recyclerView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                </android.support.v7.widget.RecyclerView>
+            </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/more_authorinfo"
+                android:id="@+id/book_change_view"
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="5dp">
+                android:layout_height="wrap_content">
+
 
                 <TextView
-                    android:id="@+id/author_info"
-                    android:layout_width="300dp"
-                    android:layout_height="95dp"
-                    android:layout_marginLeft="10dp"
-                    android:lines="4"
-                    android:text="a\nb" />
-
-                <ImageView
-
-                    android:layout_width="20dp"
+                    android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="30dp"
-                    android:src="@drawable/ic_chevron_right_black_24dp" />
-            </LinearLayout>
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="作者"
+                    android:textSize="11sp" />
 
-            <TextView
-                android:id="@+id/tv_categray"
-                android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
-                android:text="目录"
-                android:textSize="11sp" />
+                <LinearLayout
+                    android:id="@+id/more_authorinfo"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp">
 
-            <LinearLayout
-                android:id="@+id/more_catalog"
-                android:layout_width="match_parent"
-                android:layout_height="80dp"
-                android:layout_marginTop="5dp">
+                    <TextView
+                        android:id="@+id/author_info"
+                        android:layout_width="300dp"
+                        android:layout_height="95dp"
+                        android:layout_marginLeft="10dp"
+                        android:lines="4"
+                        android:text="a\nb" />
+
+                    <ImageView
+
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/ic_chevron_right_black_24dp" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/catalog"
-                    android:layout_width="300dp"
-                    android:layout_height="95dp"
-                    android:layout_marginLeft="10dp"
-                    android:lines="4"
-                    android:text="a\nb" />
-
-                <ImageView
-
-                    android:layout_width="20dp"
+                    android:layout_width="match_parent"
                     android:layout_height="20dp"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="30dp"
-                    android:src="@drawable/ic_chevron_right_black_24dp" />
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:text="目录"
+                    android:textSize="11sp" />
+
+                <LinearLayout
+                    android:id="@+id/more_catalog"
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/catalog"
+                        android:layout_width="300dp"
+                        android:layout_height="95dp"
+                        android:layout_marginLeft="10dp"
+                        android:lines="4"/>
+
+                    <ImageView
+
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="30dp"
+                        android:src="@drawable/ic_chevron_right_black_24dp" />
+                </LinearLayout>
             </LinearLayout>
+
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

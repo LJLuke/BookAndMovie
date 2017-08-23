@@ -281,7 +281,6 @@ public class MovieFragment extends Fragment {
 
     private void setRecyclerview(final List<VideoHelper> videoHelperList, RecyclerView recyclerView) {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        Log.d("setrecycler", "setRecyclerview: ");
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         RecyclerviewAdapter adapter1 = new RecyclerviewAdapter(R.layout.movie_recyclerview_item, videoHelperList, getContext());
