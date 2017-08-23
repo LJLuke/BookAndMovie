@@ -3,12 +3,19 @@ package com.example.lijiang.bookandmovie.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Handler;
+import android.os.Message;
+import android.os.Parcelable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -16,42 +23,85 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.lijiang.bookandmovie.R;
+import com.example.lijiang.bookandmovie.Utils.HttpUtil;
 import com.example.lijiang.bookandmovie.Utils.MyListView;
 import com.example.lijiang.bookandmovie.Utils.RecordSQLiteOpenHelper;
+import com.example.lijiang.bookandmovie.entities.BookHelper;
+import com.example.lijiang.bookandmovie.fragments.MoreBooksFragment;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 public class SearchActivity extends AppCompatActivity {
-
+    private static final int BOOKSEARCH = 0;
+    private static final int MOVIESEARCH = 1;
     private ArrayList<String> spinnerList = new ArrayList<>();
     private Spinner spinner;
     private EditText et_search;
     private TextView tv_tip;
     private MyListView mMyListView;
+    private String choice;
+    private LinearLayout linear;
     private TextView tv_clear;
+    private ScrollView scrollView;
     private RecordSQLiteOpenHelper mHelper = new RecordSQLiteOpenHelper(this);
     private SQLiteDatabase mDatabase;
     private BaseAdapter mBaseAdapter;
+    private List<BookHelper> books = new ArrayList<>();
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case BOOKSEARCH:
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) books);
+                    MoreBooksFragment fragment = MoreBooksFragment.newInstance(bundle);
+                    replaceFragment(fragment);
+
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-
+        scrollView = (ScrollView) findViewById(R.id.sc_search);
         spinnerList.add("电影");
         spinnerList.add("图书");
         spinner = (Spinner) findViewById(R.id.spinner);
+        linear = (LinearLayout)findViewById(R.id.change_fragment1);
         ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_spinner_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
-
         initSearchView();
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                choice = spinnerList.get(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         tv_clear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +122,10 @@ public class SearchActivity extends AppCompatActivity {
                         insertData(et_search.getText().toString().trim());
                         queryData("");
                     }
-                    Toast.makeText(SearchActivity.this, "clicked!", Toast.LENGTH_SHORT).show();
+                    Log.d("test1", "onKey: " + choice);
+                    if (choice == "图书") {
+                        searchBooks();
+                    }
                 }
 
                 return false;
@@ -122,6 +175,68 @@ public class SearchActivity extends AppCompatActivity {
         queryData("");
     }
 
+    private void searchBooks() {
+        String bookName = et_search.getText().toString();
+        Log.d("test", "searchBooks: " + bookName);
+        HttpUtil.sendOkhttpRequest("https://api.douban.com/v2/book/search?tag=" + bookName, new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(SearchActivity.this, "搜索失败", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseData = response.body().string();
+                try {
+                    parseJSONWithGSON(responseData, books);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    private void parseJSONWithGSON(String jsonData, List list) throws Exception {
+
+
+        JSONObject jo = new JSONObject(jsonData);
+        JSONArray array = jo.getJSONArray("books");
+
+        for (int i = 0; i < array.length(); i++) {
+            JSONObject tempObject = array.getJSONObject(i);
+            BookHelper helper = new BookHelper();
+            helper.setBookName(tempObject.get("title").toString());
+            JSONObject ja = tempObject.getJSONObject("images");
+            helper.setImg(ja.getString("large"));
+            JSONArray authorArray = tempObject.getJSONArray("author");
+            String authorName = authorArray.getString(0);
+            helper.setAuthor(authorName);
+            String publisher = tempObject.getString("publisher");
+            helper.setPublishing(publisher);
+            double rating = tempObject.getJSONObject("rating").getDouble("average");
+            helper.setRating(rating);
+            String summary = tempObject.getString("summary");
+            helper.setWords(summary);
+            String catalog = tempObject.getString("catalog");
+            helper.setCatalog(catalog);
+            String pubData = tempObject.getString("pubdate");
+            helper.setPubData(pubData);
+            String authorInfo = tempObject.getString("author_intro");
+            helper.setAuthorInfo(authorInfo);
+            int manNum = tempObject.getJSONObject("rating").getInt("numRaters");
+            helper.setManNum(manNum);
+            books.add(helper);
+
+        }
+        handler.sendEmptyMessage(BOOKSEARCH);
+
+    }
+
     private void initSearchView() {
         et_search = (EditText) findViewById(R.id.et_search);
         tv_tip = (TextView) findViewById(R.id.tv_tip);
@@ -155,5 +270,13 @@ public class SearchActivity extends AppCompatActivity {
                 new int[]{android.R.id.text1}, CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
         mMyListView.setAdapter(mBaseAdapter);
         mBaseAdapter.notifyDataSetChanged();
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        scrollView.setVisibility(View.INVISIBLE);
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.change_fragment1, fragment);
+        transaction.commit();
     }
 }
