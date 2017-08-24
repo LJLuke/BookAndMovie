@@ -5,6 +5,7 @@ package com.example.lijiang.bookandmovie.entities;
  */
 
 public class DetailMovie {
+    private String id;
     private int average;
     private String stars;
     private String title;
@@ -85,5 +86,13 @@ public class DetailMovie {
 
     public void setRatingsCount(int ratingsCount) {
         this.ratingsCount = ratingsCount;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

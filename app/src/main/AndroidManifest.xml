@@ -21,6 +21,8 @@
         <activity android:name=".Activity.ArticalActivity"/>
         <activity android:name=".Activity.SearchActivity">
         </activity>
+        <activity android:name=".Activity.ResultActivity">
+        </activity>
     </application>
 
 </manifest>

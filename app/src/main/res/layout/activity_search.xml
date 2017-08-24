@@ -44,7 +44,7 @@
                     android:textSize="15sp"/>
 
                 <ImageView
-
+                    android:id="@+id/iv_search"
                     android:layout_gravity="center"
                     android:layout_width="0dp"
                     android:layout_height="20dp"

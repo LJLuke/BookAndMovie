@@ -40,7 +40,7 @@ public class MoreBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
-        ((MyViewHolder) holder).someWords.setText(list.get(position).getWords());
+        //((MyViewHolder) holder).someWords.setText(list.get(position).getWords());
         ((MyViewHolder) holder).publishing.setText("出版社：" + list.get(position).getPublishing());
         ((MyViewHolder) holder).author.setText("作者：" + list.get(position).getAuthor());
         ((MyViewHolder) holder).ratingBar.setRating((float) (list.get(position).getRating() / 2));
@@ -81,7 +81,7 @@ public class MoreBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             rating = (TextView) itemView.findViewById(R.id.rating);
             author = (TextView) itemView.findViewById(R.id.author);
             publishing = (TextView) itemView.findViewById(R.id.publishing);
-            someWords = (TextView) itemView.findViewById(R.id.somewords);
+            //someWords = (TextView) itemView.findViewById(R.id.somewords);
         }
     }
 }

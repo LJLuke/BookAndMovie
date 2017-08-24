@@ -27,7 +27,7 @@ public class RecyclerviewAdapter extends BaseQuickAdapter<VideoHelper,BaseViewHo
 
     @Override
     protected void convert(BaseViewHolder helper, VideoHelper item) {
-        Glide.with(mContext).load(item.getImageUrl()).asBitmap().into((ImageView) helper.getView(R.id.movie_image));
-        ((TextView)helper.getView(R.id.movie_name)).setText(item.getTitle());
+            Glide.with(mContext).load(item.getImageUrl()).asBitmap().into((ImageView) helper.getView(R.id.movie_image));
+            ((TextView)helper.getView(R.id.movie_name)).setText(item.getTitle());
     }
 }

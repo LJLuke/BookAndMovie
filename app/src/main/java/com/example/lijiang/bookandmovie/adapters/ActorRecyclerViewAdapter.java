@@ -11,7 +11,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.entities.Actors;
+import com.example.lijiang.bookandmovie.entities.VideoHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**

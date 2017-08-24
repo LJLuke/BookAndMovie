@@ -1,6 +1,7 @@
 package com.example.lijiang.bookandmovie.Activity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
@@ -18,11 +19,13 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
@@ -109,10 +112,11 @@ public class SearchActivity extends AppCompatActivity {
                 queryData("");
             }
         });
-
+        et_search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
         et_search.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
                 if (keyCode == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN) {
                     ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(
                             getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
@@ -125,7 +129,20 @@ public class SearchActivity extends AppCompatActivity {
                     Log.d("test1", "onKey: " + choice);
                     if (choice == "图书") {
                         searchBooks();
+                    }else if (choice == "电影"){
+                        searchMovie();
                     }
+                }else{
+                    final ImageView iv_search = (ImageView) findViewById(R.id.iv_search);
+                    iv_search.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            String bookName = et_search.getText().toString();
+                            Intent intent = new Intent(SearchActivity.this,ResultActivity.class);
+                            intent.putExtra("movie",bookName);
+                            startActivity(intent);
+                        }
+                    });
                 }
 
                 return false;
@@ -163,18 +180,20 @@ public class SearchActivity extends AppCompatActivity {
                 TextView textView = (TextView) view.findViewById(android.R.id.text1);
                 String name = textView.getText().toString();
                 et_search.setText(name);
-                Toast.makeText(SearchActivity.this, name, Toast.LENGTH_SHORT).show();
+
             }
         });
 
-        Date date = new Date();
-        long time = date.getTime();
-        insertData("Leo" + time);
-
-        // 第一次进入查询所有的历史记录
-        queryData("");
     }
 
+    private void searchMovie(){
+        String bookName = et_search.getText().toString();
+        Intent intent = new Intent(SearchActivity.this,ResultActivity.class);
+        intent.putExtra("movie",bookName);
+        startActivity(intent);
+
+
+    }
     private void searchBooks() {
         String bookName = et_search.getText().toString();
         Log.d("test", "searchBooks: " + bookName);

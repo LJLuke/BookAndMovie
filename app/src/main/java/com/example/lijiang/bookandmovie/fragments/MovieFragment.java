@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import com.zhouwei.mzbanner.holder.MZViewHolder;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -62,7 +60,7 @@ public class MovieFragment extends Fragment {
     private ImageView imageView;
     private int count = 0;
     private MZBannerView mMZBannerView;
-    static List<VideoHelper> hotMovieList = new ArrayList<>();
+    static List<Integer> mz_list = new ArrayList<>();
     private List<VideoHelper> upComingList = new ArrayList<>();
     private List<VideoHelper> top250List = new ArrayList<>();
     private List<VideoHelper> boxOfficeList = new ArrayList<>();
@@ -107,7 +105,17 @@ public class MovieFragment extends Fragment {
 
         mMZBannerView = (MZBannerView) mView.findViewById(R.id.banner);
         mMZBannerView.setIndicatorVisible(true);
-        loadVideo("http://api.douban.com/v2/movie/in_theaters");
+        mz_list.add(R.drawable.mz_one);
+        mz_list.add(R.drawable.mz_two);
+        mz_list.add(R.drawable.mz_three);
+        mz_list.add(R.drawable.mz_four);
+        mz_list.add(R.drawable.mz_five);
+        mMZBannerView.setPages(mz_list, new MZHolderCreator<MovieFragment.BannerViewHolder>() {
+            @Override
+            public MovieFragment.BannerViewHolder createViewHolder() {
+                return new MovieFragment.BannerViewHolder();
+            }
+        });
         load("http://api.douban.com/v2/movie/coming_soon", upComingList, UPCOMING_LOADFINISH);
         load("http://api.douban.com/v2/movie/top250", top250List, TOP250_LOADFINISH);
         loadBoxOffice("http://api.douban.com/v2/movie/us_box", boxOfficeList, BOXOFFICE_LOADFINISH);
@@ -115,14 +123,6 @@ public class MovieFragment extends Fragment {
             @Override
             public void handleMessage(Message msg) {
                 switch (msg.what) {
-                    case HOTMOVIE_LOADFINISH:
-                        mMZBannerView.setPages(hotMovieList, new MZHolderCreator<MovieFragment.BannerViewHolder>() {
-                            @Override
-                            public MovieFragment.BannerViewHolder createViewHolder() {
-                                return new MovieFragment.BannerViewHolder();
-                            }
-                        });
-                        break;
                     case UPCOMING_LOADFINISH:
                         TextView tv_up_all = (TextView) upComingMovieView.findViewById(R.id.all);
                         tv_up_all.setText("全部"+" "+upComingList.size());
@@ -152,7 +152,7 @@ public class MovieFragment extends Fragment {
         };
     }
 
-    public static class BannerViewHolder implements MZViewHolder<VideoHelper> {
+    public static class BannerViewHolder implements MZViewHolder<Integer> {
         private ImageView mImageView;
 
         @Override
@@ -165,10 +165,9 @@ public class MovieFragment extends Fragment {
         }
 
         @Override
-        public void onBind(Context context, int position, VideoHelper video) {
+        public void onBind(Context context, int position, Integer video) {
             // 数据绑定
-            Glide.with(context).load(hotMovieList.get(position).getImageUrl()).into(mImageView);
-
+            Glide.with(context).load(mz_list.get(position)).asBitmap().into(mImageView);
         }
     }
 
@@ -183,37 +182,6 @@ public class MovieFragment extends Fragment {
 
     }
 
-    private void loadVideo(String videoUrl) {
-        HttpUtil.sendOkhttpRequest(videoUrl, new okhttp3.Callback() {
-
-            @Override
-            public void onFailure(Call call, IOException e) {
-                    stopShow();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData = response.body().string();
-
-                try {
-                    JSONObject JSONObject = new JSONObject(responseData);
-                    JSONArray jsonArray = new JSONArray(JSONObject.getString("subjects"));
-                    for (int i = 0; i < 5; i++) {
-                        VideoHelper video = new VideoHelper();
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-                        video.setTitle(jsonObject.getString("title"));
-                        video.setId(jsonObject.getString("id"));
-                        JSONObject jsonObject1 = jsonObject.getJSONObject("images");
-                        video.setImageUrl(jsonObject1.getString("medium"));
-                        hotMovieList.add(video);
-                    }
-                    mHandler.sendEmptyMessage(HOTMOVIE_LOADFINISH);
-                } catch (Exception e) {
-                    stopShow();
-                }
-            }
-        });
-    }
 
     private void load(String url, final List<VideoHelper> videoList, final int LOADFINISH) {
         HttpUtil.sendOkhttpRequest(url, new okhttp3.Callback() {
