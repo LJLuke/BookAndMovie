@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -45,6 +46,7 @@ public class ResultActivity extends AppCompatActivity {
 
     private RecyclerView mRecyclerView;
     private TextView mTextview;
+    private Button bt_back;
     private List<DetailMovie> mDetailMovieList = new ArrayList<>();
     private List<BookHelper> books = new ArrayList<>();
     private static final int MOVIE_FINISH = 0;
@@ -70,6 +72,13 @@ public class ResultActivity extends AppCompatActivity {
         setContentView(R.layout.activity_result);
         linearLayout = (FrameLayout) findViewById(R.id.change111);
         mTextview = (TextView) findViewById(R.id.tv_title);
+        bt_back = (Button) findViewById(R.id.result_back);
+        bt_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         String movieName = getIntent().getStringExtra("movie");
         String bookName = getIntent().getStringExtra("book");
         mRecyclerView = (RecyclerView) findViewById(R.id.result_recyclerview);
@@ -79,8 +88,6 @@ public class ResultActivity extends AppCompatActivity {
             mTextview.setText("看电影");
             linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
             mRecyclerView.setLayoutManager(linearLayoutManager);
-
-
             loadMovie("http://api.douban.com/v2/movie/search?tag=" + movieName);
             mHandler = new Handler() {
                 @Override
