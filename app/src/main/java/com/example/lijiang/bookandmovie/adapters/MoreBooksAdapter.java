@@ -3,6 +3,7 @@ package com.example.lijiang.bookandmovie.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,12 +36,14 @@ public class MoreBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_morebooks, parent, false);
+        Log.d("fun2", "onBindViewHolder: ");
         return new MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         //((MyViewHolder) holder).someWords.setText(list.get(position).getWords());
+
         ((MyViewHolder) holder).publishing.setText("出版社：" + list.get(position).getPublishing());
         ((MyViewHolder) holder).author.setText("作者：" + list.get(position).getAuthor());
         ((MyViewHolder) holder).ratingBar.setRating((float) (list.get(position).getRating() / 2));
@@ -59,6 +62,7 @@ public class MoreBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
+        Log.d("fun3", "getItemCount: "+list.size());
         return list.size();
     }
 
@@ -73,7 +77,9 @@ public class MoreBooksAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         public View view;
 
         public MyViewHolder(View itemView) {
+
             super(itemView);
+            Log.d("test1", "MyViewHolder: "+getItemCount());
             view = itemView;
             moreBookImg = (ImageView) itemView.findViewById(R.id.morebooks_img);
             moreBookName = (TextView) itemView.findViewById(R.id.morebooks_name);

@@ -67,19 +67,7 @@ public class SearchActivity extends AppCompatActivity {
     private SQLiteDatabase mDatabase;
     private BaseAdapter mBaseAdapter;
     private List<BookHelper> books = new ArrayList<>();
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case BOOKSEARCH:
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) books);
-                    MoreBooksFragment fragment = MoreBooksFragment.newInstance(bundle);
-                    replaceFragment(fragment);
 
-            }
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +77,7 @@ public class SearchActivity extends AppCompatActivity {
         spinnerList.add("电影");
         spinnerList.add("图书");
         spinner = (Spinner) findViewById(R.id.spinner);
-        linear = (LinearLayout)findViewById(R.id.change_fragment1);
+        linear = (LinearLayout) findViewById(R.id.change_fragment1);
         ArrayAdapter adapter = new ArrayAdapter(SearchActivity.this, android.R.layout.simple_spinner_item, spinnerList);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -129,17 +117,22 @@ public class SearchActivity extends AppCompatActivity {
                     Log.d("test1", "onKey: " + choice);
                     if (choice == "图书") {
                         searchBooks();
-                    }else if (choice == "电影"){
+                    } else if (choice == "电影") {
                         searchMovie();
                     }
-                }else{
+                } else {
                     final ImageView iv_search = (ImageView) findViewById(R.id.iv_search);
                     iv_search.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             String bookName = et_search.getText().toString();
-                            Intent intent = new Intent(SearchActivity.this,ResultActivity.class);
-                            intent.putExtra("movie",bookName);
+                            Intent intent = new Intent(SearchActivity.this, ResultActivity.class);
+                            if (getType().equals("电影")) {
+                                intent.putExtra("movie", bookName);
+                            } else if (getType().equals("图书")) {
+                                intent.putExtra("book", bookName);
+                            }
+
                             startActivity(intent);
                         }
                     });
@@ -186,75 +179,28 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
-    private void searchMovie(){
+    private String getType() {
+        return choice;
+    }
+
+    private void searchMovie() {
         String bookName = et_search.getText().toString();
-        Intent intent = new Intent(SearchActivity.this,ResultActivity.class);
-        intent.putExtra("movie",bookName);
+        Intent intent = new Intent(SearchActivity.this, ResultActivity.class);
+        intent.putExtra("movie", bookName);
         startActivity(intent);
 
 
     }
+
     private void searchBooks() {
         String bookName = et_search.getText().toString();
-        Log.d("test", "searchBooks: " + bookName);
-        HttpUtil.sendOkhttpRequest("https://api.douban.com/v2/book/search?tag=" + bookName, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(SearchActivity.this, "搜索失败", Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String responseData = response.body().string();
-                try {
-                    parseJSONWithGSON(responseData, books);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private void parseJSONWithGSON(String jsonData, List list) throws Exception {
-
-
-        JSONObject jo = new JSONObject(jsonData);
-        JSONArray array = jo.getJSONArray("books");
-
-        for (int i = 0; i < array.length(); i++) {
-            JSONObject tempObject = array.getJSONObject(i);
-            BookHelper helper = new BookHelper();
-            helper.setBookName(tempObject.get("title").toString());
-            JSONObject ja = tempObject.getJSONObject("images");
-            helper.setImg(ja.getString("large"));
-            JSONArray authorArray = tempObject.getJSONArray("author");
-            String authorName = authorArray.getString(0);
-            helper.setAuthor(authorName);
-            String publisher = tempObject.getString("publisher");
-            helper.setPublishing(publisher);
-            double rating = tempObject.getJSONObject("rating").getDouble("average");
-            helper.setRating(rating);
-            String summary = tempObject.getString("summary");
-            helper.setWords(summary);
-            String catalog = tempObject.getString("catalog");
-            helper.setCatalog(catalog);
-            String pubData = tempObject.getString("pubdate");
-            helper.setPubData(pubData);
-            String authorInfo = tempObject.getString("author_intro");
-            helper.setAuthorInfo(authorInfo);
-            int manNum = tempObject.getJSONObject("rating").getInt("numRaters");
-            helper.setManNum(manNum);
-            books.add(helper);
-
-        }
-        handler.sendEmptyMessage(BOOKSEARCH);
+        Intent intent = new Intent(SearchActivity.this, ResultActivity.class);
+        intent.putExtra("book", bookName);
+        startActivity(intent);
 
     }
+
+
 
     private void initSearchView() {
         et_search = (EditText) findViewById(R.id.et_search);
@@ -291,11 +237,5 @@ public class SearchActivity extends AppCompatActivity {
         mBaseAdapter.notifyDataSetChanged();
     }
 
-    private void replaceFragment(Fragment fragment) {
-        scrollView.setVisibility(View.INVISIBLE);
-        FragmentManager manager = getSupportFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.replace(R.id.change_fragment1, fragment);
-        transaction.commit();
-    }
+
 }
