@@ -95,7 +95,7 @@ public class ResultActivity extends AppCompatActivity {
                     switch (msg.what) {
                         case MOVIE_FINISH:
                             ResultMovieAdapter resultMovieAdapter = new ResultMovieAdapter(R.layout.item_morebooks, mDetailMovieList, ResultActivity.this);
-                            resultMovieAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);
+                            resultMovieAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
                             resultMovieAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
                                 @Override
                                 public void onItemClick(BaseQuickAdapter adapter, View view, int position) {

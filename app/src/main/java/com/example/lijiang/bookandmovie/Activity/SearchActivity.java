@@ -37,20 +37,9 @@ import com.example.lijiang.bookandmovie.Utils.HttpUtil;
 import com.example.lijiang.bookandmovie.Utils.MyListView;
 import com.example.lijiang.bookandmovie.Utils.RecordSQLiteOpenHelper;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
-import com.example.lijiang.bookandmovie.fragments.MoreBooksFragment;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-
 public class SearchActivity extends AppCompatActivity {
     private static final int BOOKSEARCH = 0;
     private static final int MOVIESEARCH = 1;
