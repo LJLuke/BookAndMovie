@@ -37,7 +37,6 @@ public class MoreBooksFragment extends Fragment {
             ((MainActivity)getActivity()).fragmentStatus=1;
         }
         helpers = getArguments().getParcelableArrayList("list");
-        Log.d("test2", "onCreateView: "+helpers.size()+helpers.get(1).getBookName());
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recycler_morebooks);
         MoreBooksAdapter adapter = new MoreBooksAdapter(helpers, getActivity());
