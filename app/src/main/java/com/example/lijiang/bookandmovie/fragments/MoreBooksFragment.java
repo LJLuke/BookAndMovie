@@ -24,7 +24,6 @@ public class MoreBooksFragment extends Fragment {
     private List<BookHelper> helpers;
 
     public MoreBooksFragment() {
-
     }
 
     @Override
