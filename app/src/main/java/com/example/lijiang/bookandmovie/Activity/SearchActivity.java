@@ -37,20 +37,9 @@ import com.example.lijiang.bookandmovie.Utils.HttpUtil;
 import com.example.lijiang.bookandmovie.Utils.MyListView;
 import com.example.lijiang.bookandmovie.Utils.RecordSQLiteOpenHelper;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
-import com.example.lijiang.bookandmovie.fragments.MoreBooksFragment;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
-
 public class SearchActivity extends AppCompatActivity {
     private static final int BOOKSEARCH = 0;
     private static final int MOVIESEARCH = 1;
@@ -101,6 +90,24 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         et_search.setImeOptions(EditorInfo.IME_ACTION_SEARCH);
+        final ImageView iv_search = (ImageView) findViewById(R.id.iv_search);
+        if (et_search.getText().toString() != null){
+            iv_search.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String bookName = et_search.getText().toString();
+                    Intent intent = new Intent(SearchActivity.this, ResultActivity.class);
+                    if (getType().equals("电影")) {
+                        intent.putExtra("movie", bookName);
+                    } else if (getType().equals("图书")) {
+                        intent.putExtra("book", bookName);
+                    }
+
+                    startActivity(intent);
+                }
+            });
+        }
+
         et_search.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -114,30 +121,15 @@ public class SearchActivity extends AppCompatActivity {
                         insertData(et_search.getText().toString().trim());
                         queryData("");
                     }
-                    Log.d("test1", "onKey: " + choice);
-                    if (choice == "图书") {
-                        searchBooks();
-                    } else if (choice == "电影") {
-                        searchMovie();
-                    }
-                } else {
-                    final ImageView iv_search = (ImageView) findViewById(R.id.iv_search);
-                    iv_search.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            String bookName = et_search.getText().toString();
-                            Intent intent = new Intent(SearchActivity.this, ResultActivity.class);
-                            if (getType().equals("电影")) {
-                                intent.putExtra("movie", bookName);
-                            } else if (getType().equals("图书")) {
-                                intent.putExtra("book", bookName);
-                            }
-
-                            startActivity(intent);
+                    if (et_search.getText() != null){
+                        if (choice == "图书") {
+                            searchBooks();
+                        } else if (choice == "电影") {
+                            searchMovie();
                         }
-                    });
-                }
+                    }
 
+                }
                 return false;
             }
         });

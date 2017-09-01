@@ -11,6 +11,11 @@
         android:layout_height="23dp"
         android:orientation="horizontal">
 
+        <View
+            android:background="#60c473"
+            android:layout_marginLeft="10dp"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"/>
         <TextView
             android:id="@+id/group_name"
             android:layout_width="0dp"

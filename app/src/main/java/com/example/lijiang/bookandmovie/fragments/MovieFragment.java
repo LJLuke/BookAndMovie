@@ -105,6 +105,7 @@ public class MovieFragment extends Fragment {
 
         mMZBannerView = (MZBannerView) mView.findViewById(R.id.banner);
         mMZBannerView.setIndicatorVisible(true);
+        mz_list.clear();
         mz_list.add(R.drawable.mz_one);
         mz_list.add(R.drawable.mz_two);
         mz_list.add(R.drawable.mz_three);
