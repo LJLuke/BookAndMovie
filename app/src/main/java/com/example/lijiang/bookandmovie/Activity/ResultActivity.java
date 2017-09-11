@@ -11,24 +11,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.Utils.HttpUtil;
-import com.example.lijiang.bookandmovie.adapters.RecyclerviewAdapter;
 import com.example.lijiang.bookandmovie.adapters.ResultMovieAdapter;
-import com.example.lijiang.bookandmovie.entities.Actors;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
 import com.example.lijiang.bookandmovie.entities.DetailMovie;
-import com.example.lijiang.bookandmovie.entities.VideoHelper;
-import com.example.lijiang.bookandmovie.fragments.MoreBooksFragment;
+import com.example.lijiang.bookandmovie.fragments.MoreFragment;
 import com.yqritc.recyclerviewflexibledivider.HorizontalDividerItemDecoration;
 
 import org.json.JSONArray;
@@ -59,7 +54,7 @@ public class ResultActivity extends AppCompatActivity {
                 case 1:
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) books);
-                    MoreBooksFragment fragment = MoreBooksFragment.newInstance(bundle);
+                    MoreFragment fragment = MoreFragment.newInstance(bundle);
                     replaceFragment(fragment);
 
             }

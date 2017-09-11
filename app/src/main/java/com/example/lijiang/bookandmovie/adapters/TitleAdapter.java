@@ -17,7 +17,7 @@ import com.example.lijiang.bookandmovie.Activity.MainActivity;
 import com.example.lijiang.bookandmovie.R;
 import com.example.lijiang.bookandmovie.entities.BookHelper;
 import com.example.lijiang.bookandmovie.fragments.BookFragment;
-import com.example.lijiang.bookandmovie.fragments.MoreBooksFragment;
+import com.example.lijiang.bookandmovie.fragments.MoreFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +61,7 @@ public class TitleAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) sources.get(position));
-                replaceFragment(MoreBooksFragment.newInstance(bundle));
+                replaceFragment(MoreFragment.newInstance(bundle));
             }
         });
     }

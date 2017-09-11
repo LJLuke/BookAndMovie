@@ -150,7 +150,7 @@ public class BookFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) list);
-                MoreBooksFragment fragment = MoreBooksFragment.newInstance(bundle);
+                MoreFragment fragment = MoreFragment.newInstance(bundle);
                 replaceFragment(fragment);
             }
         });
@@ -262,7 +262,7 @@ public class BookFragment extends Fragment {
             public void onClick(View view) {
                 Bundle bundle = new Bundle();
                 bundle.putParcelableArrayList("list", (ArrayList<? extends Parcelable>) list);
-                MoreBooksFragment fragment = MoreBooksFragment.newInstance(bundle);
+                MoreFragment fragment = MoreFragment.newInstance(bundle);
                 replaceFragment(fragment);
             }
         });

@@ -78,6 +78,7 @@ public class ArticalActivity extends AppCompatActivity {
         setContentView(R.layout.activity_artical);
         color = getLuckColor();
         Log.d("color2",color+"");
+        ll_movie_change_view = (LinearLayout) findViewById(R.id.movie_change_view);
         movieOrBook = (TextView)findViewById(R.id.movieorbook);
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         layout= (CollapsingToolbarLayout)findViewById(R.id.collapsing_toolbar);
@@ -141,6 +142,7 @@ public class ArticalActivity extends AppCompatActivity {
         });
     }
     private void initBookView() {
+        ll_movie_change_view.setVisibility(View.GONE);
         movieOrBook.setText("图书");
         helper = getIntent().getParcelableExtra("bookInfo");
         linearLayout.setBackgroundResource(color);

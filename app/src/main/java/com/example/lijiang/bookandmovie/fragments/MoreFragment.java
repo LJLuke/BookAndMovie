@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,10 +19,9 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MoreBooksFragment extends Fragment {
+public class MoreFragment extends Fragment {
     private List<BookHelper> helpers;
-
-    public MoreBooksFragment() {
+    public MoreFragment() {
     }
 
     @Override
@@ -44,8 +42,8 @@ public class MoreBooksFragment extends Fragment {
         return view;
     }
 
-    public static MoreBooksFragment newInstance(Bundle args) {
-        MoreBooksFragment fragment = new MoreBooksFragment();
+    public static MoreFragment newInstance(Bundle args) {
+        MoreFragment fragment = new MoreFragment();
         fragment.setArguments(args);
         return fragment;
     }

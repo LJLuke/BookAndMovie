@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         tabList.add("电影");
         tabList.add("图书");
         mFragmentList.add(movieFragment);
